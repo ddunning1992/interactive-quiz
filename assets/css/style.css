@@ -1,0 +1,15 @@
+header {
+    margin: auto;
+    width: 100%;
+    font-size: 1.3rem;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+}
+
+header div {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    margin: 2vw;
+}
