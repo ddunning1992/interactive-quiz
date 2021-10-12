@@ -1,7 +1,15 @@
 var timeLeft = 60;
 var timerEl = document.getElementById("countdown");
-var quizContainer = document.getElementById("quiz");
 var startButton = document.getElementById("start");
+var quizBoxEl = document.getElementById("quiz");
+var titleEl = document.getElementById("title");
+var questionEl = document.getElementById("question");
+var answerList = document.getElementById("answer-list");
+
+var startInfo = {
+  title: "JavaScript Quiz",
+  text: "You have 60 seconds to answer all the questions. Wrong answers will deduct 10 seconds from your time. Your time remaining at the end of the quiz will be your score."
+};
 
 var quizQuestions = [
   {
@@ -76,7 +84,7 @@ var quizQuestions = [
       D: "if i = 5"
     },
   },
-]
+];
 
 function countdown() {
   timerEl.textContent = "Time left: " + timeLeft;
@@ -91,18 +99,55 @@ function countdown() {
     }, 200);
 };
 
-function startPage() {
-
+var startPage = function() {
+  titleEl.innerHTML = startInfo.title;
+  questionEl.innerHTML = startInfo.text; 
 }
 
-function buildQuiz() {
- 
+function startQuiz() {
+  countdown();
+  startButton.style.display = "none";
+
+  for (let i = 0; i < quizQuestions.length; i++) {
+    questionEl.innerHTML = quizQuestions[i].question;
+    
+
+    var answerElA = document.createElement("li");
+    answerElA.textContent = quizQuestions[i].answers.A;
+    answerElA.className = "select";
+    anserElA.setAttribute
+
+    var answerElB = document.createElement("li");
+    answerElB.textContent = quizQuestions[i].answers.B;
+    answerElB.className = "select";
+
+    var answerElC = document.createElement("li");
+    answerElC.textContent = quizQuestions[i].answers.C;
+    answerElC.className = "select";
+
+    var answerElD = document.createElement("li");
+    answerElD.textContent = quizQuestions[i].answers.D;
+    answerElD.className = "select";
+
+    answerList.appendChild(answerElA);
+    answerList.appendChild(answerElB);
+    answerList.appendChild(answerElC);
+    answerList.appendChild(answerElD);
+
+    break;
+  }
+};
+
+var answerSelect = function(event) {
+  var targetAnswer = event.target;
+  
 }
 
 function showResults() {
 
-}
+};
 
 startPage();
 
 startButton.addEventListener("click", startQuiz);
+
