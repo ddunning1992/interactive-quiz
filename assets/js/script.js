@@ -16,10 +16,11 @@ var quizQuestions = [
     question: "Inside of which HTML element do we place the JavaScript?",
     answers: {
       A: "<script>",
-      B: "<scripting",
+      B: "<scripting>",
       C: "<javascript>",
       D: "<js>"
     },
+    correctAnswer: "<script>"
   },
   {
     question: "Where is the correct place to insert a JavaScript?",
@@ -29,6 +30,7 @@ var quizQuestions = [
       C: "<footer>",
       D: "bottom of the <body>"
     },
+    correctAnswer: "bottom of the <body>"
   },
   {
     question: "What is the correct syntax for referring to an external script called xxx.js?",
@@ -38,15 +40,17 @@ var quizQuestions = [
       C: "<script name='xxx.js'>",
       D: "<script file='xxx.js'>"
     },
+    correctAnswer: "<script src='xxx.js'>"
   },
   {
-    question: "The external JavaScript file must contain the <script> tag.",
+    question: "The external JavaScript file must contain the script tag.",
     answers: {
       A: "True",
       B: "False",
       C: "",
       D: ""
     },
+    correctAnswer: "False"
   },
   {
     question: "How do you write 'Hello World' in an alert box?",
@@ -56,6 +60,7 @@ var quizQuestions = [
       C: "msgBox('Hello World');",
       D: "msg('Hello World');"
     },
+    correctAnswer: "alert('Hello World');"
   },
   {
     question: "How do you create a function in JavaScript?",
@@ -65,6 +70,7 @@ var quizQuestions = [
       C: "function = myFunction()",
       D: ""
     },
+    correctAnswer: "function myFunction()"
   },
   {
     question: "How do you call a function named 'myFunction'?",
@@ -74,15 +80,17 @@ var quizQuestions = [
       C: "call myFunction",
       D: ""
     },
+    correctAnswer: "myFunction()"
   },
   {
     question: "How to write an IF statement in JavaScript?",
     answers: {
       A: "if i == 5 then",
-      B: "if (i == 5)",
+      B: "if (i === 5)",
       C: "if i = 5 then",
       D: "if i = 5"
     },
+    correctAnswer: "if (i === 5)"
   },
 ];
 
@@ -131,27 +139,39 @@ function displayQuestion() {
 
   var answerElA = document.createElement("button");
   answerElA.textContent = quizQuestions[i].answers.A;
-  answerElA.addEventListener("click", nextQuestion);
 
   var answerElB = document.createElement("button");
   answerElB.textContent = quizQuestions[i].answers.B;
-  answerElB.addEventListener("click", nextQuestion);
 
   var answerElC = document.createElement("button");
   answerElC.textContent = quizQuestions[i].answers.C;
-  answerElC.addEventListener("click", nextQuestion);
+  if (!quizQuestions[i].answers.C) {
+    answerElC.style.display = "none";
+  }
 
   var answerElD = document.createElement("button");
   answerElD.textContent = quizQuestions[i].answers.D;
-  answerElD.addEventListener("click", nextQuestion);
+  if (!quizQuestions[i].answers.D) {
+    answerElD.style.display = "none";
+  }
 
   answerList.appendChild(answerElA);
   answerList.appendChild(answerElB);
   answerList.appendChild(answerElC);
   answerList.appendChild(answerElD);
-}
+};
 
+answerList.addEventListener("click", function(event) {
+  var userAnswer = event.target.textContent;
 
+  if (userAnswer === quizQuestions[i].correctAnswer) {
+    nextQuestion();
+  }
+  else {
+    alert("Wrong Answer");
+    timeLeft -= 10;
+  };
+});
 
 function showResults() {
 
