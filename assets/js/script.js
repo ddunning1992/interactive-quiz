@@ -5,6 +5,7 @@ var scoreLink = document.getElementById("view-scoreboard");
 var titleEl = document.getElementById("title");
 var questionEl = document.getElementById("question");
 var answerList = document.getElementById("answer-list");
+var warning = document.getElementById("warnings");
 
 var startInfo = {
   title: "JavaScript Quiz",
@@ -103,9 +104,13 @@ function countdown() {
     timerEl.textContent  = "Time left: " + timeLeft;
     timeLeft--;
 
+    if (timerEl.style.display === "none") {
+      clearInterval(timeInterval);
+    };
+
     if (timeLeft === -1) {
       window.clearInterval(timeInterval);
-      //displayMessage();
+      displayMessage();
       }
     }, 1000);
 };
@@ -170,10 +175,23 @@ answerList.addEventListener("click", function(event) {
     nextQuestion();
   }
   else {
-    alert("Wrong Answer");
+    warningTimer();
     timeLeft -= 10;
   };
 });
+
+function warningTimer() {
+  var warningTime = 3;
+  var timeInterval = setInterval(function() {
+    warningTime--;
+    if (warningTime >= -1) {
+      warning.textContent = "Wrong Answer!";
+    } else {
+    clearInterval(timeInterval);
+    warning.textContent = "";
+    };
+  }, 1000);
+};
 
 function showResults() {
   timerEl.style.display = "none";
@@ -184,9 +202,7 @@ function showResults() {
   playerScore = timeLeft;
 
   playerNameInput = window.prompt("Enter Your Initials");
-
-
-  var currentHighScores = localStorage.getItem("high-scores");
+  var currentHighScores = JSON.parse(localStorage.getItem("high-scores"));
   if (!currentHighScores) {
     var playerDataObj = {
       name: playerNameInput,
@@ -196,64 +212,50 @@ function showResults() {
     saveScore();
   }
   else if (currentHighScores) {
-    currentHighScores = JSON.parse(currentHighScores);
-
-    highScores.push(currentHighScores);
 
     var playerDataObj = {
       name: playerNameInput,
       score: playerScore,
     };
-    highScores.push(playerDataObj);
-  }
-  
-
-  saveScore();
-  
-  //answerList.innerHTML = "<form></form>";
-  //var highScoreForm = document.createElement("input");
-  //highScoreForm.setAttribute("type", "text");
-  //highScoreForm.setAttribute("placeholder", "Enter Your Initials");
-  //answerList.appendChild(highScoreForm);
-
-  //var scoreSubmit = document.createElement("button");
-  //scoreSubmit.setAttribute("id", "save-score");
-  //scoreSubmit.textContent = "Submit Score";
-  //answerList.appendChild(scoreSubmit);
-
+    localStorage.setItem("high-scores",JSON.stringify([ ...currentHighScores, playerDataObj ]));
+  };
 };
 
 function viewHighScores() {
   questionEl.innerHTML = "Here's the high scores!";
-  answerList.innerHTML = document.createElement("ul");
+  answerList.innerHTML = document.createElement("div");
+  answerList.textContent = "";
 
-  var firstPlace = document.createElement("li");
+  var firstPlace = document.createElement("h5");
   answerList.appendChild(firstPlace);
-  var secondPlace = document.createElement("li");
+  var secondPlace = document.createElement("h5");
   answerList.appendChild(secondPlace);
-  var thirdPlace = document.createElement("li");
+  var thirdPlace = document.createElement("h5");
   answerList.appendChild(thirdPlace);
-
-  var scoreBoard = [];
 
   var savedScores = localStorage.getItem("high-scores");
 
   savedScores = JSON.parse(savedScores);
   console.log(savedScores);
 
-  scoreBoard.push(savedScores[i]);
-  scoreBoard.sort(function(a, b) {
-    return a.score - b.score;
+  savedScores.sort(function(a, b) {
+    return b.score - a.score;
   });
 
-  firstPlace.innerHTML = "<h5>First Place: " + scoreBoard[0].name + " Score: " + scoreBoard[0].score + "</h5>";
-  secondPlace.innerHTML = "<h5>Second Place: " + scoreBoard[1].name + " Score: " + scoreBoard[1].score + "</h5>";
-  thirdPlace.innerHTML = "<h5>Third Place: " + scoreBoard[2].name + " Score: " + scoreBoard[2].score + "</h5>";
+  firstPlace.innerHTML = "<h5>First Place: " + savedScores[0].name + " Score: " + savedScores[0].score + "</h5>";
+  secondPlace.innerHTML = "<h5>Second Place: " + savedScores[1].name + " Score: " + savedScores[1].score + "</h5>";
+  thirdPlace.innerHTML = "<h5>Third Place: " + savedScores[2].name + " Score: " + savedScores[2].score + "</h5>";
 };
 
 var saveScore = function() {
   localStorage.setItem("high-scores", JSON.stringify(highScores));
 };
+
+function displayMessage() {
+  window.alert("Time up. Try Again");
+  window.location.reload();
+
+}
 
 startPage();
 

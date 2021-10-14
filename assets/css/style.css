@@ -62,3 +62,8 @@ button:hover {
 #view-scoreboard:hover {
     filter: brightness(1)
 }
+
+footer {
+    font-size: 20px;
+    margin: 25px;
+}
