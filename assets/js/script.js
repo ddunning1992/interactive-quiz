@@ -1,7 +1,7 @@
 var timeLeft = 60;
 var timerEl = document.getElementById("countdown");
 var startButton = document.getElementById("start");
-//var quizBoxEl = document.getElementById("quiz");
+var scoreLink = document.getElementById("view-scoreboard");
 var titleEl = document.getElementById("title");
 var questionEl = document.getElementById("question");
 var answerList = document.getElementById("answer-list");
@@ -10,6 +10,8 @@ var startInfo = {
   title: "JavaScript Quiz",
   text: "You have 60 seconds to answer all the questions. Wrong answers will deduct 10 seconds from your time. Your time remaining at the end of the quiz will be your score."
 };
+
+var highScores = [];
 
 var quizQuestions = [
   {
@@ -100,6 +102,7 @@ function countdown() {
   var timeInterval = setInterval(function() {
     timerEl.textContent  = "Time left: " + timeLeft;
     timeLeft--;
+
     if (timeLeft === -1) {
       window.clearInterval(timeInterval);
       //displayMessage();
@@ -123,10 +126,9 @@ function startQuiz() {
 };
 
 function nextQuestion() {
-  console.log(this);
   i++;
   if (i === quizQuestions.length) {
-    console.log("end game");  
+    showResults(); 
   }
   else {
     displayQuestion();
@@ -174,10 +176,88 @@ answerList.addEventListener("click", function(event) {
 });
 
 function showResults() {
+  timerEl.style.display = "none";
+  answerList.innerHTML = "";
 
+  questionEl.innerHTML = "Your final score is " + timeLeft + ".";
+
+  playerScore = timeLeft;
+
+  playerNameInput = window.prompt("Enter Your Initials");
+
+
+  var currentHighScores = localStorage.getItem("high-scores");
+  if (!currentHighScores) {
+    var playerDataObj = {
+      name: playerNameInput,
+      score: playerScore,
+    };
+    highScores.push(playerDataObj);
+    saveScore();
+  }
+  else if (currentHighScores) {
+    currentHighScores = JSON.parse(currentHighScores);
+
+    highScores.push(currentHighScores);
+
+    var playerDataObj = {
+      name: playerNameInput,
+      score: playerScore,
+    };
+    highScores.push(playerDataObj);
+  }
+  
+
+  saveScore();
+  
+  //answerList.innerHTML = "<form></form>";
+  //var highScoreForm = document.createElement("input");
+  //highScoreForm.setAttribute("type", "text");
+  //highScoreForm.setAttribute("placeholder", "Enter Your Initials");
+  //answerList.appendChild(highScoreForm);
+
+  //var scoreSubmit = document.createElement("button");
+  //scoreSubmit.setAttribute("id", "save-score");
+  //scoreSubmit.textContent = "Submit Score";
+  //answerList.appendChild(scoreSubmit);
+
+};
+
+function viewHighScores() {
+  questionEl.innerHTML = "Here's the high scores!";
+  answerList.innerHTML = document.createElement("ul");
+
+  var firstPlace = document.createElement("li");
+  answerList.appendChild(firstPlace);
+  var secondPlace = document.createElement("li");
+  answerList.appendChild(secondPlace);
+  var thirdPlace = document.createElement("li");
+  answerList.appendChild(thirdPlace);
+
+  var scoreBoard = [];
+
+  var savedScores = localStorage.getItem("high-scores");
+
+  savedScores = JSON.parse(savedScores);
+  console.log(savedScores);
+
+  scoreBoard.push(savedScores[i]);
+  scoreBoard.sort(function(a, b) {
+    return a.score - b.score;
+  });
+
+  firstPlace.innerHTML = "<h5>First Place: " + scoreBoard[0].name + " Score: " + scoreBoard[0].score + "</h5>";
+  secondPlace.innerHTML = "<h5>Second Place: " + scoreBoard[1].name + " Score: " + scoreBoard[1].score + "</h5>";
+  thirdPlace.innerHTML = "<h5>Third Place: " + scoreBoard[2].name + " Score: " + scoreBoard[2].score + "</h5>";
+};
+
+var saveScore = function() {
+  localStorage.setItem("high-scores", JSON.stringify(highScores));
 };
 
 startPage();
 
 startButton.addEventListener("click", startQuiz);
+
+scoreLink.addEventListener("click", viewHighScores);
 

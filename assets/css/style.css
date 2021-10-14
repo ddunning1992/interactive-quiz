@@ -1,3 +1,8 @@
+:root {
+    font-family: Sans-serif;
+    text-align: center;
+}
+
 header {
     margin: auto;
     width: 100%;
@@ -12,4 +17,48 @@ header div {
     flex-wrap: wrap;
     justify-content: space-between;
     margin: 2vw;
+}
+
+main {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    display: block;
+}
+
+#answer-list {
+    justify-content: center;
+}
+
+#answer-list button {
+    display: block;
+    margin: 5px auto;
+}
+
+button {
+    background-color: blueviolet;
+    color: white;
+    font-weight: bold;
+    padding: 10px;
+    border-radius: 5%;
+    filter: brightness(0.9);
+    cursor: pointer;
+}
+
+button:hover {
+    filter: brightness(1);
+}
+
+#view-scoreboard {
+    background-color: blueviolet;
+    color: white;
+    border: 2px solid rgb(50, 52, 54);
+    border-radius: 5px;
+    padding: 10px;
+    cursor: pointer;
+    filter: brightness(0.9);
+}
+
+#view-scoreboard:hover {
+    filter: brightness(1)
 }
